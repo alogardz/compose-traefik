@@ -1,0 +1,22 @@
+#version: '3'
+
+services:
+  reverse-proxy:
+    image: traefik:v2.11
+    command:
+      - --global.checknewversion=false
+      - --global.sendanonymoususage=false
+      - --providers.docker
+      - --providers.docker.watch=true
+      - --providers.docker.exposedbydefault=false
+      - --entrypoints.http=true
+      - --entrypoints.http.address=:80
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  default:
+    name: traefik
+    driver: bridge
